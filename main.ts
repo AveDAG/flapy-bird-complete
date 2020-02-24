@@ -11,6 +11,12 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Gap, function (sprite, otherSpri
         info.changeScoreBy(1)
     }
 })
+// change jump power
+function check_points () {
+    if (info.score() <= 1) {
+        mySprite.ay = 150
+    }
+}
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Projectile, function (sprite, otherSprite) {
     game.over(false)
 })
@@ -26,9 +32,9 @@ let bottomImage: Image = null
 let topImage: Image = null
 let gap = 0
 let mySprite: Sprite = null
-scene.setBackgroundColor(9)
+scene.setBackgroundColor(10)
 info.setScore(0)
-effects.blizzard.startScreenEffect()
+effects.hearts.startScreenEffect()
 mySprite = sprites.create(img`
 . . . . . . . . . . f f f . . . 
 . . . . . . . . . f f f . . . . 
@@ -49,6 +55,7 @@ f f f f f f f f f f f f f f f .
 `, SpriteKind.Player)
 mySprite.ay = 300
 let anim = animation.createAnimation(ActionKind.Jumping, 25)
+check_points()
 game.onUpdateInterval(1500, function () {
     gap = Math.randomRange(0, 3)
     if (gap == 0) {
