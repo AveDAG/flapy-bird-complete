@@ -15,9 +15,9 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Projectile, function (sprite, ot
     game.over(false)
 })
 controller.anyButton.onEvent(ControllerButtonEvent.Pressed, function () {
-    mySprite2.vy = -100
-    animation.setAction(mySprite2, ActionKind.Jumping)
-    mySprite2.startEffect(effects.rings, 300)
+    mySprite.vy = -100
+    animation.setAction(mySprite, ActionKind.Jumping)
+    mySprite.startEffect(effects.rings, 300)
 })
 let projectile: Sprite = null
 let gapSprite: Sprite = null
@@ -25,11 +25,11 @@ let gapImage: Image = null
 let bottomImage: Image = null
 let topImage: Image = null
 let gap = 0
-let mySprite2: Sprite = null
+let mySprite: Sprite = null
 scene.setBackgroundColor(9)
 info.setScore(0)
 effects.blizzard.startScreenEffect()
-mySprite2 = sprites.create(img`
+mySprite = sprites.create(img`
 . . . . . . . . . . f f f . . . 
 . . . . . . . . . f f f . . . . 
 . . . . . . . . . f f . . . . . 
@@ -47,7 +47,7 @@ f f f f f f f f f f f f f f f .
 . . f f f f f f f f f f f f . . 
 . . . f f f f f f f f f f . . . 
 `, SpriteKind.Player)
-mySprite2.ay = 300
+mySprite.ay = 300
 let anim = animation.createAnimation(ActionKind.Jumping, 25)
 game.onUpdateInterval(1500, function () {
     gap = Math.randomRange(0, 3)
@@ -421,10 +421,10 @@ game.onUpdateInterval(1500, function () {
     projectile.bottom = scene.screenHeight()
 })
 game.onUpdate(function () {
-    if (mySprite2.vy > 0) {
-        animation.setAction(mySprite2, ActionKind.Idle)
+    if (mySprite.vy > 0) {
+        animation.setAction(mySprite, ActionKind.Idle)
     }
-    if (mySprite2.bottom > 120 || mySprite2.top < 0) {
+    if (mySprite.bottom > 120 || mySprite.top < 0) {
         game.over(false)
     }
 })
