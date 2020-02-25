@@ -11,52 +11,19 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Gap, function (sprite, otherSpri
         info.changeScoreBy(1)
     }
 })
-// change jump power
-function check_points () {
-    if (info.score() <= 1) {
-        mySprite.ay = 150
+function sprite_jump () {
+    mySprite.vy = -100
+    mySprite.startEffect(effects.rings, 300)
+}
+function other_ways_to_die () {
+    if (mySprite.bottom > 120 || mySprite.top < 0) {
+        game.over(false)
     }
 }
-sprites.onOverlap(SpriteKind.Player, SpriteKind.Projectile, function (sprite, otherSprite) {
+function game_over () {
     game.over(false)
-})
-controller.anyButton.onEvent(ControllerButtonEvent.Pressed, function () {
-    mySprite.vy = -100
-    animation.setAction(mySprite, ActionKind.Jumping)
-    mySprite.startEffect(effects.rings, 300)
-})
-let projectile: Sprite = null
-let gapSprite: Sprite = null
-let gapImage: Image = null
-let bottomImage: Image = null
-let topImage: Image = null
-let gap = 0
-let mySprite: Sprite = null
-scene.setBackgroundColor(10)
-info.setScore(0)
-effects.hearts.startScreenEffect()
-mySprite = sprites.create(img`
-. . . . . . . . . . f f f . . . 
-. . . . . . . . . f f f . . . . 
-. . . . . . . . . f f . . . . . 
-. . . . . . f f f f f f . . . . 
-. . . . . f f f f f f f f . . . 
-. . . . f f f d 1 f f f f f . . 
-. . . . f f f 1 f f f f 4 f . . 
-. . . . f f f d f f f f 4 4 . . 
-f f f f f f f f f f 4 4 4 4 4 f 
-f f f 5 5 5 f f f 4 4 4 4 4 f . 
-f f f 5 5 5 5 f f f f f f f . . 
-f f f f f 5 5 f f f f f f f f . 
-f f f f f f f f f f f f f f f . 
-. f f f f f f f f f f f f f f . 
-. . f f f f f f f f f f f f . . 
-. . . f f f f f f f f f f . . . 
-`, SpriteKind.Player)
-mySprite.ay = 300
-let anim = animation.createAnimation(ActionKind.Jumping, 25)
-check_points()
-game.onUpdateInterval(1500, function () {
+}
+function block_points () {
     gap = Math.randomRange(0, 3)
     if (gap == 0) {
         topImage = img`
@@ -426,12 +393,57 @@ game.onUpdateInterval(1500, function () {
     projectile.top = 0
     projectile = sprites.createProjectileFromSide(bottomImage, -45, 0)
     projectile.bottom = scene.screenHeight()
+}
+// change jump power
+function check_points () {
+    if (info.score() <= 1) {
+        mySprite.ay = 150
+    }
+}
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Projectile, function (sprite, otherSprite) {
+    game_over()
 })
+controller.anyButton.onEvent(ControllerButtonEvent.Pressed, function () {
+    sprite_jump()
+})
+let projectile: Sprite = null
+let gapSprite: Sprite = null
+let gapImage: Image = null
+let bottomImage: Image = null
+let topImage: Image = null
+let gap = 0
+let mySprite: Sprite = null
+scene.setBackgroundColor(10)
+info.setScore(0)
+effects.hearts.startScreenEffect()
+mySprite = sprites.create(img`
+. . . . . . . . . . f f f . . . 
+. . . . . . . . . f f f . . . . 
+. . . . . . . . . f f . . . . . 
+. . . . . . f f f f f f . . . . 
+. . . . . f f f f f f f f . . . 
+. . . . f f f d 1 f f f f f . . 
+. . . . f f f 1 f f f f 4 f . . 
+. . . . f f f d f f f f 4 4 . . 
+f f f f f f f f f f 4 4 4 4 4 f 
+f f f 5 5 5 f f f 4 4 4 4 4 f . 
+f f f 5 5 5 5 f f f f f f f . . 
+f f f f f 5 5 f f f f f f f f . 
+f f f f f f f f f f f f f f f . 
+. f f f f f f f f f f f f f f . 
+. . f f f f f f f f f f f f . . 
+. . . f f f f f f f f f f . . . 
+`, SpriteKind.Player)
+mySprite.ay = 300
+check_points()
+// this spawns the logs
+//
+// log images
+//
+game.onUpdateInterval(1500, function () {
+    block_points()
+})
+// game over
 game.onUpdate(function () {
-    if (mySprite.vy > 0) {
-        animation.setAction(mySprite, ActionKind.Idle)
-    }
-    if (mySprite.bottom > 120 || mySprite.top < 0) {
-        game.over(false)
-    }
+    other_ways_to_die()
 })
